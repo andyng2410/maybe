@@ -36,6 +36,9 @@
     <%# Custom overrides for browser's confirm API  %>
     <%= render "layouts/shared/confirm_dialog" %>
 
+    <%# Trial conversion prompt for expiring trials %>
+    <%= render "layouts/shared/trial_conversion_dialog" unless self_hosted? %>
+
     <%= render "impersonation_sessions/super_admin_bar" if Current.true_user&.super_admin? && show_super_admin_bar? %>
     <%= render "impersonation_sessions/approval_bar" if Current.true_user&.impersonated_support_sessions&.initiated&.any? %>
 

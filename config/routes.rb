@@ -255,6 +255,7 @@ Rails.application.routes.draw do
     post "plaid"
     post "plaid_eu"
     post "stripe"
+    post "polar"
   end
 
   get "redis-configuration-error", to: "pages#redis_configuration_error"
@@ -271,6 +272,11 @@ Rails.application.routes.draw do
 
   get "privacy", to: redirect("https://maybefinance.com/privacy")
   get "terms", to: redirect("https://maybefinance.com/tos")
+
+  # Admin routes (super admin only)
+  namespace :admin do
+    resources :analytics, only: :index
+  end
 
   # Defines the root path route ("/")
   root "pages#dashboard"

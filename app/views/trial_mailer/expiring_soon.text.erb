@@ -1,0 +1,12 @@
+Your trial is expiring soon
+
+Hi <%= @user.first_name || "there" %>,
+
+Your Maybe trial will expire in <%= @days_remaining %> <%= @days_remaining == 1 ? "day" : "days" %>.
+
+Don't lose access to your financial data! Subscribe now to continue using Maybe and keep all your accounts, transactions, and insights.
+
+Subscribe to Maybe: <%= subscription_upgrade_url %>
+
+---
+Already subscribed? You can safely ignore this email.

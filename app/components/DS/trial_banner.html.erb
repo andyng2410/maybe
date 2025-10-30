@@ -1,0 +1,25 @@
+<% if render? %>
+  <div class="<%= container_classes %>" data-controller="trial-banner">
+    <div class="flex items-center gap-3 flex-1">
+      <%= helpers.icon icon_name, size: "sm", class: "shrink-0" %>
+
+      <div class="flex-1">
+        <div class="flex items-center gap-2">
+          <span class="font-medium text-sm"><%= message %></span>
+          <span class="text-xs opacity-75">(<%= percentage_completed.round %>% complete)</span>
+        </div>
+
+        <div class="mt-2 w-full bg-white/50 rounded-full h-1.5 theme-dark:bg-gray-700/50">
+          <div class="bg-current h-1.5 rounded-full transition-all duration-300" style="width: <%= percentage_completed %>%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <%= link_to "Subscribe Now",
+                  subscription_upgrade_path,
+                  class: "inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-900 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors theme-dark:bg-gray-800 theme-dark:text-white theme-dark:hover:bg-gray-700",
+                  data: { turbo_frame: "_top" } %>
+    </div>
+  </div>
+<% end %>
