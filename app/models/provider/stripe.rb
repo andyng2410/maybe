@@ -12,6 +12,8 @@ class Provider::Stripe
     case event.type
     when /^customer\.subscription\./
       SubscriptionEventProcessor.new(event).process
+    when /^invoice\./
+      InvoiceEventProcessor.new(event).process
     else
       Rails.logger.warn "Unhandled event type: #{event.type}"
     end

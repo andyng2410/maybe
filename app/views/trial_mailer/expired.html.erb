@@ -1,0 +1,17 @@
+<h1>Your trial has expired</h1>
+
+<p>Hi <%= @user.first_name || "there" %>,</p>
+
+<p>
+  Your Maybe trial has expired. To regain access to your financial data and continue managing your accounts, please subscribe now.
+</p>
+
+<p>
+  We've kept all your data safe and ready for you. Simply choose a plan and you'll be back up and running in seconds.
+</p>
+
+<%= link_to "Subscribe Now", subscription_upgrade_url, class: "button" %>
+
+<p class="footer">
+  Questions? Reply to this email and we'll be happy to help.
+</p>

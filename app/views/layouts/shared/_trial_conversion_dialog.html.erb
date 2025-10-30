@@ -1,0 +1,78 @@
+<% if Current.family.trialing? && Current.family.days_left_in_trial.to_i <= 2 %>
+  <%= render DS::Dialog.new(
+    id: "trial-conversion-dialog",
+    auto_open: true,
+    width: "md",
+    disable_frame: true,
+    data: { controller: "trial-conversion" }
+  ) do |dialog| %>
+    <% dialog.with_header(title: "Your trial is ending soon") %>
+
+    <% dialog.with_body do %>
+      <div class="space-y-4">
+        <% if Current.family.days_left_in_trial == 0 %>
+          <p class="text-sm text-secondary">
+            Your free trial expires <strong>today</strong>. Subscribe now to keep access to all your financial data and insights.
+          </p>
+        <% elsif Current.family.days_left_in_trial == 1 %>
+          <p class="text-sm text-secondary">
+            Your free trial expires <strong>tomorrow</strong>. Subscribe now to ensure uninterrupted access to your financial data.
+          </p>
+        <% else %>
+          <p class="text-sm text-secondary">
+            You have <strong><%= Current.family.days_left_in_trial %> days</strong> left in your trial. Subscribe now to unlock the full Maybe experience.
+          </p>
+        <% end %>
+
+        <div class="bg-surface-inset rounded-lg p-4 space-y-3">
+          <p class="text-sm font-medium text-primary">What you'll keep with a subscription:</p>
+          <ul class="space-y-2 text-sm text-secondary">
+            <li class="flex items-start gap-2">
+              <%= icon("check", size: "sm", color: "success") %>
+              <span>Unlimited accounts and transactions</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <%= icon("check", size: "sm", color: "success") %>
+              <span>Automatic syncing with your bank</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <%= icon("check", size: "sm", color: "success") %>
+              <span>Investment tracking and insights</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <%= icon("check", size: "sm", color: "success") %>
+              <span>AI-powered financial assistant</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <%= icon("check", size: "sm", color: "success") %>
+              <span>All future updates and features</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="text-center py-2">
+          <p class="text-2xl font-bold text-primary">$9/month</p>
+          <p class="text-xs text-secondary mt-1">or $90/year (save 2 months)</p>
+        </div>
+      </div>
+    <% end %>
+
+    <% dialog.with_actions do %>
+      <%= render DS::Button.new(
+        text: "Subscribe Now",
+        variant: "primary",
+        full_width: true,
+        href: subscription_upgrade_path,
+        data: { turbo_frame: "_top" }
+      ) %>
+    <% end %>
+
+    <% dialog.with_actions(cancel_action: true) do %>
+      <%= render DS::Button.new(
+        text: "Remind Me Later",
+        variant: "outline",
+        full_width: true
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>

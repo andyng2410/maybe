@@ -1,0 +1,17 @@
+<h1>Your trial is expiring soon</h1>
+
+<p>Hi <%= @user.first_name || "there" %>,</p>
+
+<p>
+  Your Maybe trial will expire in <strong><%= @days_remaining %> <%= @days_remaining == 1 ? "day" : "days" %></strong>.
+</p>
+
+<p>
+  Don't lose access to your financial data! Subscribe now to continue using Maybe and keep all your accounts, transactions, and insights.
+</p>
+
+<%= link_to "Subscribe to Maybe", subscription_upgrade_url, class: "button" %>
+
+<p class="footer">
+  Already subscribed? You can safely ignore this email.
+</p>

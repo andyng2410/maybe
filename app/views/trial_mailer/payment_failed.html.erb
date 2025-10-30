@@ -1,0 +1,17 @@
+<h1>Payment failed</h1>
+
+<p>Hi <%= @user.first_name || "there" %>,</p>
+
+<p>
+  We were unable to process your payment for Maybe. Your subscription will remain active, but please update your payment method to avoid any interruption in service.
+</p>
+
+<p>
+  <strong>Next retry:</strong> We'll automatically retry your payment in a few days.
+</p>
+
+<%= link_to "Update Payment Method", subscription_url, class: "button" %>
+
+<p class="footer">
+  If you have any questions or need assistance, please reply to this email.
+</p>

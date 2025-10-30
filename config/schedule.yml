@@ -18,3 +18,9 @@ run_security_health_checks:
   class: "SecurityHealthCheckJob"
   queue: "scheduled"
   description: "Runs security health checks to detect issues with security data"
+
+check_trial_expirations:
+  cron: "0 10 * * *" # 10:00 AM UTC daily
+  class: "TrialExpirationNotifierJob"
+  queue: "scheduled"
+  description: "Sends trial expiration reminders and marks expired trials"

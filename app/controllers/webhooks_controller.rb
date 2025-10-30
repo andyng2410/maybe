@@ -54,4 +54,25 @@ class WebhooksController < ApplicationController
       head :bad_request
     end
   end
+
+  def polar
+    polar_provider = Provider::Registry.get_provider(:polar)
+
+    begin
+      webhook_body = request.body.read
+      signature = request.env["HTTP_X_POLAR_SIGNATURE"]
+
+      polar_provider.process_webhook(webhook_body, signature)
+
+      head :ok
+    rescue JSON::ParserError => error
+      Sentry.capture_exception(error)
+      Rails.logger.error "JSON parser error: #{error.message}"
+      head :bad_request
+    rescue Provider::Polar::Error => error
+      Sentry.capture_exception(error)
+      Rails.logger.error "Polar webhook error: #{error.message}"
+      head :bad_request
+    end
+  end
 end

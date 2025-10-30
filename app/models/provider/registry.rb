@@ -32,6 +32,15 @@ class Provider::Registry
         Provider::Stripe.new(secret_key:, webhook_secret:)
       end
 
+      def polar
+        api_key = ENV["POLAR_API_KEY"]
+        webhook_secret = ENV["POLAR_WEBHOOK_SECRET"]
+
+        return nil unless api_key.present? && webhook_secret.present?
+
+        Provider::Polar.new(api_key:, webhook_secret:)
+      end
+
       def synth
         api_key = ENV.fetch("SYNTH_API_KEY", Setting.synth_api_key)
 

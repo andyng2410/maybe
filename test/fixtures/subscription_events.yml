@@ -1,0 +1,29 @@
+# Subscription Events Fixtures
+
+trial_started:
+  family: dylan_family
+  subscription: trialing
+  event_type: trial_started
+  event_data:
+    status: trialing
+  occurred_at: <%= 10.days.ago %>
+
+trial_converted:
+  family: dylan_family
+  subscription: active
+  event_type: trial_converted
+  event_data:
+    previous_status: trialing
+    current_status: active
+  occurred_at: <%= 5.days.ago %>
+
+payment_failed:
+  family: dylan_family
+  subscription: active
+  event_type: payment_failed
+  event_data:
+    invoice_id: inv_123
+    amount_due: 9.0
+    currency: USD
+    attempt_count: 1
+  occurred_at: <%= 2.days.ago %>

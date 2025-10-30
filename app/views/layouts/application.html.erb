@@ -124,6 +124,8 @@
         <%= icon("panel-right", as_button: true, data: { action: "app-layout#toggleRightSidebar" }) %>
       </div>
 
+      <%= render DS::TrialBanner.new(family: Current.family) unless self_hosted? %>
+
       <% if content_for?(:page_header) %>
         <%= yield :page_header %>
       <% end %>

@@ -1,0 +1,125 @@
+<% content_for :breadcrumbs do %>
+  <%= render "layouts/shared/breadcrumbs", breadcrumbs: [
+    { label: "Admin" },
+    { label: "Subscription Analytics", path: admin_analytics_index_path }
+  ] %>
+<% end %>
+
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-primary">Subscription Analytics</h1>
+
+    <form method="get" class="flex items-center gap-2">
+      <select name="range" class="px-3 py-2 border border-primary rounded-lg bg-container text-primary">
+        <option value="7" <%= "selected" if @time_range == "7" %>>Last 7 days</option>
+        <option value="30" <%= "selected" if @time_range == "30" %>>Last 30 days</option>
+        <option value="90" <%= "selected" if @time_range == "90" %>>Last 90 days</option>
+        <option value="365" <%= "selected" if @time_range == "365" %>>Last year</option>
+      </select>
+      <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:opacity-80">Update</button>
+    </form>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="bg-container rounded-lg shadow-border-xs p-6">
+      <p class="text-sm text-secondary mb-1">Trials Started</p>
+      <p class="text-3xl font-bold text-primary"><%= @metrics[:trials_started] %></p>
+    </div>
+
+    <div class="bg-container rounded-lg shadow-border-xs p-6">
+      <p class="text-sm text-secondary mb-1">Trials Converted</p>
+      <p class="text-3xl font-bold text-success"><%= @metrics[:trials_converted] %></p>
+      <p class="text-xs text-secondary mt-1"><%= @metrics[:conversion_rate] %>% conversion rate</p>
+    </div>
+
+    <div class="bg-container rounded-lg shadow-border-xs p-6">
+      <p class="text-sm text-secondary mb-1">Trials Expired</p>
+      <p class="text-3xl font-bold text-warning"><%= @metrics[:trials_expired] %></p>
+    </div>
+
+    <div class="bg-container rounded-lg shadow-border-xs p-6">
+      <p class="text-sm text-secondary mb-1">Subscriptions Created</p>
+      <p class="text-3xl font-bold text-primary"><%= @metrics[:subscriptions_created] %></p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="bg-container rounded-lg shadow-border-xs p-6">
+      <p class="text-sm text-secondary mb-1">Subscriptions Canceled</p>
+      <p class="text-3xl font-bold text-destructive"><%= @metrics[:subscriptions_canceled] %></p>
+    </div>
+
+    <div class="bg-container rounded-lg shadow-border-xs p-6">
+      <p class="text-sm text-secondary mb-1">Payment Failures</p>
+      <p class="text-3xl font-bold text-destructive"><%= @metrics[:payment_failures] %></p>
+    </div>
+
+    <div class="bg-container rounded-lg shadow-border-xs p-6">
+      <p class="text-sm text-secondary mb-1">Payment Failure Rate</p>
+      <p class="text-3xl font-bold text-destructive"><%= @metrics[:payment_failure_rate] %>%</p>
+    </div>
+  </div>
+
+  <div class="bg-container rounded-lg shadow-border-xs p-6">
+    <h2 class="text-xl font-bold text-primary mb-4">Recent Events</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b border-primary">
+            <th class="text-left py-3 px-4 text-sm font-medium text-secondary">Time</th>
+            <th class="text-left py-3 px-4 text-sm font-medium text-secondary">Family</th>
+            <th class="text-left py-3 px-4 text-sm font-medium text-secondary">Event Type</th>
+            <th class="text-left py-3 px-4 text-sm font-medium text-secondary">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_events.each do |event| %>
+            <tr class="border-b border-secondary">
+              <td class="py-3 px-4 text-sm text-primary">
+                <%= event.occurred_at.strftime("%b %d, %Y %I:%M %p") %>
+              </td>
+              <td class="py-3 px-4 text-sm text-primary">
+                <%= event.family_id.to_s.first(8) %>...
+              </td>
+              <td class="py-3 px-4">
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium <%= event_badge_class(event.event_type) %>">
+                  <%= event.event_type.humanize %>
+                </span>
+              </td>
+              <td class="py-3 px-4 text-sm text-secondary">
+                <% if event.event_data["status"].present? %>
+                  Status: <%= event.event_data["status"] %>
+                <% end %>
+                <% if event.event_data["interval"].present? %>
+                  | <%= event.event_data["interval"].capitalize %>
+                <% end %>
+                <% if event.event_data["amount"].present? %>
+                  | $<%= event.event_data["amount"] %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<%
+  # Helper method for event badge colors
+  def event_badge_class(event_type)
+    case event_type
+    when "trial_started"
+      "bg-blue-100 text-blue-800 theme-dark:bg-blue-900/20 theme-dark:text-blue-300"
+    when "trial_converted", "subscription_created", "payment_succeeded"
+      "bg-green-100 text-green-800 theme-dark:bg-green-900/20 theme-dark:text-green-300"
+    when "trial_expired", "subscription_canceled", "payment_failed"
+      "bg-red-100 text-red-800 theme-dark:bg-red-900/20 theme-dark:text-red-300"
+    when "trial_expiration_reminder_sent"
+      "bg-yellow-100 text-yellow-800 theme-dark:bg-yellow-900/20 theme-dark:text-yellow-300"
+    else
+      "bg-gray-100 text-gray-800 theme-dark:bg-gray-900/20 theme-dark:text-gray-300"
+    end
+  end
+%>
